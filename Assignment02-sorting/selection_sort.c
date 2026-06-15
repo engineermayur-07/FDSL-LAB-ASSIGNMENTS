@@ -1,10 +1,9 @@
 #include <stdio.h>
 int main(){
-    int choice =-1,n,temp;
+    int choice =-1,n,min,temp;
     int arr[100];
     while(1){
-
-        printf("\n\n\tMENU\n");
+        printf("\tMENU\n");
         printf("\t1. Continue\n");
         printf("\t2. Exit\n");
         scanf("%d",&choice);
@@ -21,16 +20,17 @@ int main(){
             }
 
             for(int i = 0 ; i < n ; i++){
-                
-                for( int j = 0 ; j < n-i ; j++ ){
-                    
-                    if(arr[j] > arr[j+1]){
-                        temp = arr[j];
-                        arr[j] = arr[j+1];
-                        arr[j+1] = temp;
+                min = i;
+
+                for( int j = i ; j < n ; j++ ){
+                    if(arr[j] < arr[min]){
+                        min = j;
                     }
                 }
-                 
+
+                temp = arr[i];
+                arr[i] = arr[min];
+                arr[min] = temp;
             }
 
             printf("\n The sorted array is :- ");
