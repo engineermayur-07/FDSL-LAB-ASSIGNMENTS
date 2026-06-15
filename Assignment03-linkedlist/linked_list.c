@@ -133,6 +133,7 @@ void InsertAtPosition(){
 
             if( position < 1 || position > (count+1) ){
                 printf("\n The position %d is invalid, escaping the function ",position);
+                return ;
             }
 
             else{
@@ -166,5 +167,118 @@ void InsertAtPosition(){
 }
 
 void DeleteAtFirst(){
-    
+
+    if (head == NULL){
+        printf("\n There are no nodes to delete \n");
+        return;
+    }
+
+    else {
+
+        if( head->next == NULL){
+            char choice[20] = "0";
+            printf("\n There is only one node in the list. \n");
+            printf("\n Do you want to delete the node(yes/no) :- ");
+            scanf("%s", &choice);
+
+            if(choice == "No" || choice == "no" || choice == "NO"){
+                printf("Escaping");
+                return;
+            }
+        }
+
+        struct node *temp=head;
+        head=head->next;
+        printf("\n The first node with data %d is deleted successfully", &temp->data);
+        free(temp);
+
+    }
+
+}
+
+void DeleteAtLast(){
+    if (head == NULL){
+        printf("\n There are no nodes to delete \n");
+        return;
+    }
+
+    else{
+
+        if( head->next == NULL){
+            char choice[20]="0";
+            printf("\n There is only one node in the list. \n");
+            printf("\n Do you want to delete the node(yes/no) :- ");
+            scanf("%s", &choice);
+
+            if(choice == "No" || choice == "no" || choice == "NO"){
+                printf("Escaping");
+                return;
+            }    
+        }
+        
+        struct node *temp = head;
+        while(temp->next != NULL){
+            temp = temp->next;
+        }
+        
+        printf("\n The data %d at last position is deleted successfully\n",temp->data);
+        free(temp);
+
+    }
+
+}
+
+void DeleteAtPosition(){
+    if(head == NULL){
+        printf("\n No node in the list, escaping the function\n");
+        return ;
+    }
+
+    else{
+        struct node *temp;
+
+        int count = 0;
+        int position=0;
+
+        temp=head;
+        while(temp->next == NULL){
+            count++;
+            temp = temp->next;
+        }
+        printf("\n There are total %d nodes\n", count+1);
+
+        printf("\n Enter the position of the node to be deleted :- ");
+        scanf("%d", &position);
+
+        if( position < 1 || position > (count+1) ){
+            printf("\n The position %d is invalid, escaping the function ",position);
+            return;
+        }
+
+        else{
+                if( position == 1){
+                    DeleteAtFirst();
+                }
+
+                else if ( position == (count+1) ){
+                    DeleteAtLast();
+                }
+                else{
+
+                    struct node *previous;
+                    count = 0;
+                    temp=head;
+                    while( count < (position-1) ){
+                        previous = temp;
+                        temp = temp->next;
+                        count++;
+                    }
+                    previous->next = temp->next;
+                    
+                    printf("\n The element %d is deleted successfully \n",temp->data);
+                    free(temp);
+
+                }
+
+    }
 }
