@@ -293,7 +293,7 @@ void display(){
         printf("\n No data to display, list is empty ");
         return;
     }
-    printf("Data :");
+    printf("\tData :\n");
     int position = 1;
     while( temp !=NULL ){
         printf("\tV\n");
