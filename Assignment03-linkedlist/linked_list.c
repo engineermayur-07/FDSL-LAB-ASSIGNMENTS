@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct node{
     struct node *next;
@@ -26,15 +27,9 @@ void InsertAtStart(){
     else{
         printf("\n Enter the integer data to insert in the newnode :- ");
         scanf("%d", &newnode->data);
-
-        if(head == NULL){
-            head = newnode;
-        }
+        newnode->next = head;
+        head = newnode;
         
-        else{
-            newnode->next = head;
-            head = newnode;
-        }
 
         printf("\n The data %d is inserted successfully \n", head->data);
 
@@ -50,7 +45,7 @@ void InsertionAtLast(){
             printf("\n There are no nodes in the list, do you want to add the first node (yes/no) ");
             scanf("%s", &choice);
             
-            if(choice == "no" || choice == "No" || choice == "NO"){
+            if(strcmp(choice,"no") == 0 || strcmp(choice,"No") == 0 || strcmp(choice,"NO") == 0){
                 printf("\n Returning \n");
                 return;
             }
@@ -97,7 +92,7 @@ void InsertAtPosition(){
         printf("\n Do you want to create a new node (yes/no) :- ");
         scanf("%s",&choice);
 
-        if(choice == "no" || choice == "No" || choice == "NO"){
+        if(strcmp(choice,"no") == 0 || strcmp(choice,"No") == 0 || strcmp(choice,"NO") == 0 ){
                 printf("\n Returning \n");
                 return;
             }
@@ -109,60 +104,59 @@ void InsertAtPosition(){
     }
 
     else{
-        struct node *temp, *newnode;
-        newnode = CreateNode();
+        struct node *temp;
+        
+        
+        int count = 0;
+        int position=0;
 
-        if(newnode == NULL){
-            printf("\n Out of memory, buy few GB's \n");
-            return;
+        temp=head;
+        while(temp->next != NULL){
+            count++;
+            temp = temp->next;
+        }
+        printf("\n There are total %d nodes\n", count+1);
+
+        printf("\n Enter the position at which the node is to be inserted :- ");
+        scanf("%d", &position);
+
+        if( position < 1 || position > (count+2) ){
+            printf("\n The position %d is invalid, escaping the function ",position);
+            return ;
+        }
+
+        else{
+            if( position == 1){
+                InsertAtStart();
+            }
+
+            else if ( position == (count+2) ){
+                InsertionAtLast();
+            }
+            else{
+                struct node *newnode;
+                newnode = CreateNode();
+                if( newnode == NULL ){
+                    printf("Out of Memory");
+                    return ;
+                }
+                count = 0;
+                temp=head;
+                while( count < (position-2) ){
+                    temp = temp->next;
+                    count++;
+                }
+                printf("\n Enter data to push in the node :- ");
+                scanf("%d", &newnode->data);
+
+                newnode->next = temp->next;
+                temp->next = newnode;
+                
+                printf("\n The element %d is inserted successfully \n",newnode->data);
+
+            }
         }
         
-        else{
-            int count = 0;
-            int position=0;
-
-            temp=head;
-            while(temp->next == NULL){
-                count++;
-                temp = temp->next;
-            }
-            printf("\n There are total %d nodes\n", count+1);
-
-            printf("\n Enter the position at which the node is to be inserted :- ");
-            scanf("%d", &position);
-
-            if( position < 1 || position > (count+1) ){
-                printf("\n The position %d is invalid, escaping the function ",position);
-                return ;
-            }
-
-            else{
-                if( position == 1){
-                    InsertAtStart();
-                }
-
-                else if ( position == (count+1) ){
-                    InsertionAtLast();
-                }
-                else{
-
-                    count = 0;
-                    temp=head;
-                    while( count < (position-2) ){
-                        temp = temp->next;
-                        count++;
-                    }
-                    printf("\n Enter data to push in the node :- ");
-                    scanf("%d", &newnode->data);
-
-                    newnode->next = temp->next;
-                    temp = newnode;
-                    
-                    printf("\n The element %d is inserted successfully \n",temp->data);
-
-                }
-            }
-        }
     }
 }
 
@@ -181,7 +175,7 @@ void DeleteAtFirst(){
             printf("\n Do you want to delete the node(yes/no) :- ");
             scanf("%s", &choice);
 
-            if(choice == "No" || choice == "no" || choice == "NO"){
+            if(strcmp(choice,"no") == 0 || strcmp(choice,"NO") == 0 || strcmp(choice,"No") == 0 ){
                 printf("Escaping");
                 return;
             }
@@ -189,7 +183,7 @@ void DeleteAtFirst(){
 
         struct node *temp=head;
         head=head->next;
-        printf("\n The first node with data %d is deleted successfully", &temp->data);
+        printf("\n The first node with data %d is deleted successfully", temp->data);
         free(temp);
 
     }
@@ -203,26 +197,35 @@ void DeleteAtLast(){
     }
 
     else{
-
+        struct node *temp = head;
         if( head->next == NULL){
             char choice[20]="0";
             printf("\n There is only one node in the list. \n");
             printf("\n Do you want to delete the node(yes/no) :- ");
             scanf("%s", &choice);
 
-            if(choice == "No" || choice == "no" || choice == "NO"){
+            if(strcmp(choice,"no") == 0 || strcmp(choice,"No") == 0 || strcmp(choice,"NO") == 0 ){
                 printf("Escaping");
+                return;
+            }
+            else{
+                temp = head;
+                printf("\n The data %d at last position is deleted successfully\n",temp->data);
+                free(temp);
+                head = NULL;
                 return;
             }    
         }
         
-        struct node *temp = head;
+        struct node *previous = temp;
         while(temp->next != NULL){
+            previous = temp;
             temp = temp->next;
         }
-        
+        previous->next =NULL;
         printf("\n The data %d at last position is deleted successfully\n",temp->data);
         free(temp);
+
 
     }
 
@@ -241,7 +244,7 @@ void DeleteAtPosition(){
         int position=0;
 
         temp=head;
-        while(temp->next == NULL){
+        while(temp->next != NULL){
             count++;
             temp = temp->next;
         }
@@ -294,7 +297,9 @@ void display(){
     int position = 1;
     while( temp !=NULL ){
         printf("\tV\n");
-        printf(" position : %d data : %d",position,temp->data);
+        printf(" position : %d data : %d\n",position,temp->data);
+        temp = temp->next;
+        position++;
     }
 
 }
@@ -316,7 +321,7 @@ int main(){
 
 
         printf("\n Enter the choice no :- ");
-        scanf("%d",choice);
+        scanf("%d",&choice);
 
         switch (choice)
         {
@@ -336,7 +341,7 @@ int main(){
             DeleteAtLast();
             break;
         case 6:
-            DeleteAtPosition;
+            DeleteAtPosition();
             break;
         case 7:
             display();
