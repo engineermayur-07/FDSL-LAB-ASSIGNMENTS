@@ -170,8 +170,10 @@ void pattern08( int n ){
 
         printf("\n");
     }
-
+    return ;
 }
+
+
 
 int main(){
     int choice = -1 , n = 4 ;
