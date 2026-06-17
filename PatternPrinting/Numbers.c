@@ -210,5 +210,5 @@ int main(){
         printf("\n There are only 8 patterns, enter no from 1 to 8");
         break;
     }
-    pattern08(4) ;
+    return 0 ;
 }
